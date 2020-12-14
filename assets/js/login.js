@@ -43,40 +43,39 @@ $(function() {
     // 3. 收集表单中数据（用户名 、 密码） ==> jQ的serialize() form中带有name属性的值
     // 4. 发送ajax ==> 照着接口文档
     $("#register").on("submit", function(e) {
-        e.preventDefault();
-        let data = $(this).serialize();
-        $.ajax({
-            type: "POST",
-            url: "http://ajax.frontend.itheima.net/api/reguser",
-            data,
-            success: function(res) {
-                console.log(res);
-                if (res.status !== 0) {
-                    // 注册失败
-                    // return console.log(res.message);
-                    return layer.msg(res.message);
+            e.preventDefault();
+            let data = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                url: "/api/reguser",
+                data,
+                success: function(res) {
+                    console.log(res);
+                    if (res.status !== 0) {
+                        // 注册失败
+                        // return console.log(res.message);
+                        return layer.msg(res.message);
+                    }
+                    // 注册成功
+                    // console.log("注册成功");
+                    layer.msg("注册成功");
+
+                    // 清空注册的form表单
+                    $("#register")[0].reset();
+
+                    // 去登录 ==> 触发其点击功能
+                    $("#goTologin").click();
+
                 }
-                // 注册成功
-                // console.log("注册成功");
-                layer.msg("注册成功");
-
-                // 清空注册的form表单
-                $("#register")[0].reset();
-
-                // 去登录 ==> 触发其点击功能
-                $("#goTologin").click();
-
-            }
+            })
         })
-    })
-
-    //登录功能
+        //登录功能
     $("#loginForm").on("submit", function(e) {
         e.preventDefault()
         let data = $(this).serialize()
         $.ajax({
             type: "POST",
-            url: "http://ajax.frontend.itheima.net/api/login ",
+            url: "/api/login ",
             data,
             success: function(res) {
                 console.log(res);
@@ -87,6 +86,10 @@ $(function() {
                 // layer.msg("登录成功, 即将跳转到首页");
                 // 跳转页面 ==> 弹框刚出现，就跳转了（弹框关闭之后在跳转）
                 // location.href = "/home/index.html";
+
+
+                // 把token（令牌）存储到本地存储中
+                localStorage.setItem("token", res.token)
                 layer.msg(
                     "登录成功, 即将跳转到首页", {
                         time: 2000, // 2秒后关闭，关闭之后在跳转
@@ -95,6 +98,7 @@ $(function() {
                         location.href = "/大事件/01/home/index.html";
                     }
                 );
+
             }
 
         })
