@@ -26,7 +26,7 @@ function getUserInfo() {
             // 优先级（nickname和 username）
 
             let name = res.data.nickname || res.data.username;
-            console.log(name);
+            // console.log(name);
             //展示名字
             $("#welcome").text("欢迎" + name)
                 // 处理：2选1 需要根据 user_pic 来做判断
